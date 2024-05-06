@@ -4,7 +4,9 @@ package com.zlx.concurrent_study_demo.base.abc;
 
 import com.zlx.concurrent_study_demo.tools.SleepTools;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 /**
  *类说明：新启线程的方式
@@ -32,18 +34,28 @@ public class NewThread {
 
 		}
 	}
+
+	private static class useCallable implements Callable {
+
+		@Override
+		public Object call() throws Exception {
+			Thread.sleep(2000);
+			return "I am your father";
+		}
+	}
 	
 
 	public static void main(String[] args) 
 			throws InterruptedException, ExecutionException {
-		UseThread useThread = new UseThread();
-		useThread.start();
-		//useThread.start();
-
-		UseRunnable useRunnable = new UseRunnable();
-		new Thread(useRunnable).start();
-		System.out.println("main end");
-
-		
+//		UseThread useThread = new UseThread();
+//		useThread.start();
+//		//useThread.start();
+//
+//		UseRunnable useRunnable = new UseRunnable();
+//		new Thread(useRunnable).start();
+//		System.out.println("main end");
+		FutureTask<String> futureTask = new FutureTask<String>(new useCallable());
+		new Thread(futureTask).start();
+		System.out.println(futureTask.get());
 	}
 }
